@@ -1,0 +1,20 @@
+# Operating System files
+.DS_Store
+.DS_Store?
+._*
+
+# Build artifacts & compilation caches
+build/
+bin/
+*.o
+*.a
+*.hex
+*.bin
+*.elf
+
+# Editor directories and autosave files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
