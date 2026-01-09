@@ -34,3 +34,15 @@ PeakEQ createPeakEQ(float f0, float Q, float gainDB, float fs) {
 
     return eq;
 }
+
+float processPeakEQ(PeakEQ &eq, float x) {
+    float y  = eq.b0 * x + eq.z1;
+    eq.z1    = eq.b1 * x - eq.a1 * y + eq.z2;
+    eq.z2    = eq.b2 * x - eq.a2 * y;
+    return y;
+}
+
+void resetPeakEQ(PeakEQ &eq) {
+    eq.z1 = 0.0f;
+    eq.z2 = 0.0f;
+}
