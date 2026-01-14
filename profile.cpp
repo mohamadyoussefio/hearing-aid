@@ -9,3 +9,20 @@ const BandProfile DEFAULT_PROFILE[NUM_BANDS] = {
     { 4000.0f, 1.6f,  7.0f },   // Band 4 — 4 kHz,   +7 dB
     { 8000.0f, 1.8f, 10.0f },   // Band 5 — 8 kHz,  +10 dB
 };
+
+void loadDefaultProfile(BandProfile *profile) {
+    for (int i = 0; i < NUM_BANDS; i++) {
+        profile[i] = DEFAULT_PROFILE[i];
+    }
+}
+
+void buildFilters(const BandProfile *profile, PeakEQ *eqBands) {
+    for (int i = 0; i < NUM_BANDS; i++) {
+        eqBands[i] = createPeakEQ(
+            profile[i].freqHz,
+            profile[i].Q,
+            profile[i].gainDB,
+            SAMPLE_RATE
+        );
+    }
+}

@@ -12,4 +12,7 @@ struct BandProfile {
 
 extern const BandProfile DEFAULT_PROFILE[NUM_BANDS];
 
+void loadDefaultProfile(BandProfile *profile);
+void buildFilters(const BandProfile *profile, PeakEQ *eqBands);
+
 #endif // PROFILE_H
