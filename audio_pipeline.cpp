@@ -45,3 +45,38 @@ void AudioEQStream::getProfile(BandProfile *profile) const {
     }
     interrupts();
 }
+
+float AudioEQStream::_runEQ(float x) {
+    for (int i = 0; i < NUM_BANDS; i++) {
+        x = processPeakEQ(_eqBands[i], x);
+    }
+    return x;
+}
+
+void AudioEQStream::update() {
+    audio_block_t *inBlock = receiveReadOnly(0);
+    if (!inBlock) return;
+
+    audio_block_t *outBlock = allocate();
+    if (!outBlock) {
+        release(inBlock);
+        return;
+    }
+
+    for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
+        float x = (float)inBlock->data[i] / 32768.0f;
+        float y = _runEQ(x);
+
+        if (y > MAX_OUTPUT) {
+            y = MAX_OUTPUT;
+        } else if (y < -MAX_OUTPUT) {
+            y = -MAX_OUTPUT;
+        }
+
+        outBlock->data[i] = (int16_t)(y * 32767.0f);
+    }
+
+    release(inBlock);
+    transmit(outBlock);
+    release(outBlock);
+}
