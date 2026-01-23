@@ -124,3 +124,38 @@ void AudioPipeline::_applyModeToHardware(DebugMode mode) {
             break;
     }
 }
+
+void AudioPipeline::init() {
+    sgtl5000.enable();
+    sgtl5000.volume(SGTL5000_VOLUME);
+    sgtl5000.inputSelect(AUDIO_INPUT);
+    sgtl5000.micGain(SGTL5000_MIC_GAIN);
+
+    BandProfile defaultProfile[NUM_BANDS];
+    loadDefaultProfile(defaultProfile);
+    eqStream.loadProfile(defaultProfile);
+
+    toneGen.frequency(1000.0f);
+    toneGen.amplitude(0.0f);
+
+    _applyModeToHardware(_debugMode);
+}
+
+void AudioPipeline::setGain(int band, float gainDB) {
+    if (band < 0 || band >= NUM_BANDS) return;
+    eqStream.setGain(band, gainDB);
+
+    Serial.print(F("ACK  band="));
+    Serial.print(band);
+    Serial.print(F("  gain="));
+    Serial.print(gainDB, 1);
+    Serial.println(F(" dB"));
+}
+
+void AudioPipeline::loadProfile(const BandProfile *profile) {
+    eqStream.loadProfile(profile);
+}
+
+void AudioPipeline::getProfile(BandProfile *profile) const {
+    eqStream.getProfile(profile);
+}
