@@ -80,3 +80,47 @@ void AudioEQStream::update() {
     transmit(outBlock);
     release(outBlock);
 }
+
+void AudioPipeline::_applyModeToHardware(DebugMode mode) {
+    switch (mode) {
+        case DebugMode::NORMAL:
+            inputMixer.gain(0, 1.0f);
+            inputMixer.gain(1, 0.0f);
+            inputMixer.gain(2, 0.0f);
+            inputMixer.gain(3, 0.0f);
+            eqStream.setBypassed(false);
+            eqStream.setSilent(false);
+            eqStream.setAdcPrint(false);
+            break;
+
+        case DebugMode::PASSTHROUGH:
+            inputMixer.gain(0, 1.0f);
+            inputMixer.gain(1, 0.0f);
+            inputMixer.gain(2, 0.0f);
+            inputMixer.gain(3, 0.0f);
+            eqStream.setBypassed(true);
+            eqStream.setSilent(false);
+            eqStream.setAdcPrint(false);
+            break;
+
+        case DebugMode::TONE:
+            inputMixer.gain(0, 0.0f);
+            inputMixer.gain(1, 1.0f);
+            inputMixer.gain(2, 0.0f);
+            inputMixer.gain(3, 0.0f);
+            eqStream.setBypassed(true);
+            eqStream.setSilent(false);
+            eqStream.setAdcPrint(false);
+            break;
+
+        case DebugMode::ADC_PRINT:
+            inputMixer.gain(0, 1.0f);
+            inputMixer.gain(1, 0.0f);
+            inputMixer.gain(2, 0.0f);
+            inputMixer.gain(3, 0.0f);
+            eqStream.setBypassed(true);
+            eqStream.setSilent(true);
+            eqStream.setAdcPrint(true);
+            break;
+    }
+}
