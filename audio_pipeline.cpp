@@ -159,3 +159,13 @@ void AudioPipeline::loadProfile(const BandProfile *profile) {
 void AudioPipeline::getProfile(BandProfile *profile) const {
     eqStream.getProfile(profile);
 }
+
+void AudioPipeline::setToneParams(float freqHz, float amplitude) {
+    toneGen.frequency(freqHz);
+    toneGen.amplitude((_debugMode == DebugMode::TONE) ? amplitude : 0.0f);
+}
+
+void AudioPipeline::setDebugMode(DebugMode mode) {
+    _debugMode = mode;
+    _applyModeToHardware(mode);
+}
