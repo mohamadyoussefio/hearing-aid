@@ -375,6 +375,42 @@ void AudioPipeline::setToneParams(float freqHz, float amplitude) {
 
 
 // ============================================================================
+// AudioPipeline::flushAdcPrint
+//
+// Called from loop() at full speed; rate-limited internally to ~10 prints/s.
+// Prints the latest int16 sample captured by AudioEQStream::update() in
+// ADC_PRINT mode as a normalised float, matching the old format.
+// ============================================================================
+void AudioPipeline::flushAdcPrint() {
+    if (_debugMode != DebugMode::ADC_PRINT) return;
+
+    static uint32_t lastPrintMs = 0;
+    uint32_t now = millis();
+    if (now - lastPrintMs < 100) return;
+    lastPrintMs = now;
+
+    if (!eqStream.isSampleUpdated()) return;
+
+    int16_t raw = eqStream.getLastSample();
+    eqStream.clearSampleUpdate();
+
+    // Normalise to [-1.0, +1.0] — same presentation as the old ADC version
+    float norm    = (float)raw / 32768.0f;
+    // Map to a 0–4095 "raw ADC" equivalent so the output format is familiar
+    int   rawAdc  = (int)((norm + 1.0f) * 2047.5f);
+    // Approximate voltage: 3.3 V full-scale on the codec input
+    float voltage = (norm + 1.0f) * 0.5f * 3.3f;
+
+    Serial.print(F("ADC  raw="));
+    Serial.print(rawAdc);
+    Serial.print(F("  voltage="));
+    Serial.print(voltage, 3);
+    Serial.print(F(" V  norm="));
+    Serial.println(norm, 4);
+}
+
+
+// ============================================================================
 // AudioPipeline::printDiagnostics
 // ============================================================================
 void AudioPipeline::printDiagnostics(uint32_t windowMs) {
