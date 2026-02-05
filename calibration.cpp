@@ -64,7 +64,21 @@ bool Calibration::waitForButton(uint32_t timeoutMs) {
             }
         }
 
-
+        // ---- Web interface serial command "HEARD" ----
+        // The browser sends this when the user clicks "I Hear It".
+        // We check Serial here because calibration.run() is blocking and
+        // the normal loop() serial parser never runs during calibration.
+        if (Serial.available()) {
+            String line = Serial.readStringUntil('\n');
+            line.trim();
+            Serial.print(F("> "));
+            Serial.println(line);
+            if (line.equalsIgnoreCase(F("HEARD"))) {
+                return true;
+            }
+            // Any other command received during calibration is silently
+            // ignored — we cannot safely handle it mid-sweep.
+        }
     }
     return false;
 }
