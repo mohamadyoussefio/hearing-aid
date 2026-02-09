@@ -130,7 +130,10 @@ static void handleSetGain(const String &cmd) {
                   ? cmd.substring(bandIdx + 5).toInt()
                   : cmd.substring(bandIdx + 5, bandEnd).toInt();
 
-    float gain = cmd.substring(gainIdx + 5).toFloat();
+    int gainEnd = cmd.indexOf(' ', gainIdx + 5);
+    float gain  = (gainEnd == -1)
+                  ? cmd.substring(gainIdx + 5).toFloat()
+                  : cmd.substring(gainIdx + 5, gainEnd).toFloat();
 
     if (band < 0 || band >= NUM_BANDS) {
         Serial.print(F("ERR: band must be 0 - "));
