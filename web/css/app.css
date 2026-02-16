@@ -1,0 +1,348 @@
+/* =========================================================
+   COLOR SYSTEM — White / Navy / Gold
+========================================================= */
+:root {
+    --navy: #0f1f3d;
+    --navy-soft: #1c2f5a;
+    --gold: #c9a14a;
+    --gold-soft: #e8d8aa;
+    --bg: #ffffff;
+    --border: #e5e7eb;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --success: #1f7a4d;
+    --danger: #b91c1c;
+}
+
+/* =========================================================
+   GLOBAL RESET
+========================================================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.mono {
+    font-family: "JetBrains Mono", monospace;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+#topbar {
+    height: 64px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: #fff;
+}
+
+.brand-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.brand-sub {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* =========================================================
+   BADGE (CONNECTION STATUS)
+========================================================= */
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+}
+
+.badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+}
+
+.badge--on .badge-dot {
+    background: var(--success);
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+.btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.btn-primary {
+    background: var(--navy);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--navy-soft);
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+    background: #f9fafb;
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   CONNECT SCREEN
+========================================================= */
+#connect-screen {
+    max-width: 520px;
+    margin: 80px auto;
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.cs-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.cs-body {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.cs-list {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+}
+
+.cs-list li {
+    padding: 8px 0;
+    font-size: 13px;
+}
+
+/* =========================================================
+   APP LAYOUT
+========================================================= */
+#app-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr 300px;
+    height: calc(100vh - 64px);
+}
+
+/* =========================================================
+   SIDE PANELS
+========================================================= */
+aside {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+}
+
+#right-panel {
+    border-right: none;
+    border-left: 1px solid var(--border);
+}
+
+.panel-section {
+    margin-bottom: 28px;
+}
+
+.label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+/* =========================================================
+   MODE SELECTION
+========================================================= */
+.mode-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mode-item {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.mode-item:hover {
+    background: #f9fafb;
+}
+
+.mode-item.active {
+    border-color: var(--gold);
+    background: var(--gold-soft);
+}
+
+.mode-name {
+    font-weight: 600;
+}
+
+.mode-desc {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+/* =========================================================
+   STATUS GRID
+========================================================= */
+.stat-grid {
+    display: grid;
+    gap: 8px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+/* =========================================================
+   CENTER PANEL
+========================================================= */
+main {
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.ag-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+}
+
+/* =========================================================
+   CALIBRATION PANEL
+========================================================= */
+#cal-panel {
+    margin-top: 30px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.cal-freq-display {
+    text-align: center;
+}
+
+.cfd-label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.cfd-val {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.cal-level-wrap {
+    margin-top: 20px;
+}
+
+.cal-level-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.cal-level-track {
+    height: 8px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    margin-top: 6px;
+}
+
+.cal-level-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 999px;
+}
+
+/* =========================================================
+   HEARD BUTTON
+========================================================= */
+.btn-heard {
+    margin-top: 26px;
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 10px;
+    background: var(--gold);
+    border: none;
+}
+
+.btn-heard:hover {
+    filter: brightness(1.05);
+}
+
+/* =========================================================
+   EQ & DIAGNOSTICS
+========================================================= */
+.eq-title,
+.diag-title {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 10px;
+}
+

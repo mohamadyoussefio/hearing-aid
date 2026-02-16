@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hearing Aid Dashboard</title>
+        <link rel="stylesheet" href="css/app.css" />
+        <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    </head>
+    <body>
+        <header id="topbar">
+            <div class="brand"><div class="brand-name">Hearing Aid Calibration</div></div>
+            <div class="topbar-actions">
+                <div class="badge badge--off" id="conn-badge">
+                    <div class="badge-dot"></div>
+                    <span class="conn-badge__text">Disconnected</span>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btn-connect">Connect Device</button>
+                <button class="btn btn-secondary btn-sm hidden" id="btn-disconnect">Disconnect</button>
+            </div>
+        </header>
+        <div id="connect-screen">
+            <h1 class="cs-title">Connect the Teensy Device</h1>
+            <p class="cs-body">Connect Teensy 4.0 via USB and select the serial port.</p>
+        </div>
+        <div id="app-layout" class="hidden">
+            <aside id="sidebar"></aside>
+            <main id="center-panel"></main>
+            <aside id="right-panel"></aside>
+        </div>
+        <div id="toast-container"></div>
+    </body>
+</html>
