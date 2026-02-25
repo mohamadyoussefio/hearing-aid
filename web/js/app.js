@@ -404,13 +404,20 @@ class App {
     // Update frequency display
     const freqVal = document.getElementById("cal-freq-value");
     const freqUnit = document.getElementById("cal-freq-unit");
-    if (freqVal && freqUnit) {
-      if (info.freqHz >= 1000) {
-        freqVal.textContent = (info.freqHz / 1000).toString();
-        freqUnit.textContent = "kHz";
+    if (freqVal) {
+      if (freqUnit) {
+        if (info.freqHz >= 1000) {
+          freqVal.textContent = (info.freqHz / 1000).toString();
+          freqUnit.textContent = "kHz";
+        } else {
+          freqVal.textContent = info.freqHz.toString();
+          freqUnit.textContent = "Hz";
+        }
       } else {
-        freqVal.textContent = info.freqHz.toString();
-        freqUnit.textContent = "Hz";
+        freqVal.textContent =
+          info.freqHz >= 1000
+            ? `${info.freqHz / 1000} kHz`
+            : `${info.freqHz} Hz`;
       }
     }
 

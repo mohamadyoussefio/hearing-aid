@@ -4,30 +4,223 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Hearing Aid Dashboard</title>
-        <link rel="stylesheet" href="css/app.css" />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+            rel="stylesheet"
+        />
+
         <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+        <link rel="stylesheet" href="css/app.css" />
     </head>
+
     <body>
+        <!-- TOP BAR -->
         <header id="topbar">
-            <div class="brand"><div class="brand-name">Hearing Aid Calibration</div></div>
+            <div class="brand">
+                <div>
+                    <div class="brand-name">Hearing Aid Calibration</div>
+                </div>
+            </div>
+
             <div class="topbar-actions">
                 <div class="badge badge--off" id="conn-badge">
                     <div class="badge-dot"></div>
                     <span class="conn-badge__text">Disconnected</span>
                 </div>
-                <button class="btn btn-primary btn-sm" id="btn-connect">Connect Device</button>
-                <button class="btn btn-secondary btn-sm hidden" id="btn-disconnect">Disconnect</button>
+
+                <button class="btn btn-primary btn-sm" id="btn-connect">
+                    Connect Device
+                </button>
+
+                <button
+                    class="btn btn-secondary btn-sm hidden"
+                    id="btn-disconnect"
+                >
+                    Disconnect
+                </button>
             </div>
         </header>
+
+        <!-- CONNECT SCREEN -->
         <div id="connect-screen">
             <h1 class="cs-title">Connect the Teensy Device</h1>
-            <p class="cs-body">Connect Teensy 4.0 via USB and select the serial port.</p>
+            <p class="cs-body">
+                Connect the Teensy 4.0 via USB, then press
+                <strong>Connect Device</strong>. Select the serial port
+                corresponding to the board.
+            </p>
+
+            <ul class="cs-list">
+                <li>Chrome or Edge (Web Serial API enabled)</li>
+                <li>Firmware running on Teensy</li>
+                <li>Audio shield & headphones connected</li>
+                <li>Page served from localhost</li>
+            </ul>
         </div>
+
+        <!-- APP LAYOUT -->
         <div id="app-layout" class="hidden">
-            <aside id="sidebar"></aside>
-            <main id="center-panel"></main>
-            <aside id="right-panel"></aside>
+            <!-- LEFT SIDEBAR -->
+            <aside id="sidebar">
+                <div class="panel-section">
+                    <div class="label">Operating Mode</div>
+                    <div class="mode-list">
+                        <div class="mode-item active" data-mode="NORMAL">
+                            <div class="mode-name">Normal</div>
+                            <div class="mode-desc">
+                                Microphone → EQ → Output
+                            </div>
+                        </div>
+
+                        <div class="mode-item" data-mode="PASSTHROUGH">
+                            <div class="mode-name">Passthrough</div>
+                            <div class="mode-desc">Microphone → Output</div>
+                        </div>
+
+                        <div class="mode-item" data-mode="TONE">
+                            <div class="mode-name">Test Tone</div>
+                            <div class="mode-desc">1 kHz sine wave</div>
+                        </div>
+
+                        <div class="mode-item" data-mode="ADC_PRINT">
+                            <div class="mode-name">ADC Monitor</div>
+                            <div class="mode-desc">Raw mic values</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="label">Live Status</div>
+                    <div class="stat-grid">
+                        <div class="stat-row">
+                            <span>Mode</span
+                            ><span id="stat-mode" class="mono">—</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Band</span
+                            ><span id="stat-current-band" class="mono">—</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Frequency</span
+                            ><span id="stat-current-freq" class="mono">—</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Level</span
+                            ><span id="stat-current-amp" class="mono">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="label">Audiometry Calibration</div>
+                    <p class="cal-hint">
+                        Press <strong>I Hear It</strong> as soon as the tone
+                        becomes audible.
+                    </p>
+
+                    <button
+                        class="btn btn-primary btn-block"
+                        id="btn-start-cal"
+                    >
+                        Start Calibration
+                    </button>
+
+                    <button
+                        class="btn btn-secondary btn-block"
+                        id="btn-abort-cal"
+                        disabled
+                    >
+                        Abort
+                    </button>
+                </div>
+
+                <div class="panel-section">
+                    <div class="label">Export</div>
+                    <button
+                        class="btn btn-secondary btn-block btn-sm"
+                        id="btn-export-audiogram"
+                    >
+                        Export Audiogram (SVG)
+                    </button>
+                </div>
+            </aside>
+
+            <!-- CENTER PANEL -->
+            <main id="center-panel">
+                <div id="audiogram-area">
+                    <div class="ag-title">Pure-Tone Audiogram</div>
+                    <div id="audiogram-svg-container"></div>
+                    <div id="audiogram-legend" class="audiogram-legend"></div>
+                </div>
+
+                <div id="cal-panel" class="hidden">
+                    <div id="cal-steps" class="cal-steps-bar"></div>
+
+                    <div class="cal-freq-display">
+                        <div class="cfd-label">Frequency</div>
+                        <div class="cfd-val">
+                            <span id="cal-freq-value">—</span>
+                            <span id="cal-freq-unit" class="cfd-unit"></span>
+                        </div>
+                    </div>
+
+                    <div class="cal-tone-state">
+                        <span id="tone-playing-indicator" class="hidden">&#9654; Stimulus Active</span>
+                        <span id="tone-silence-indicator" class="hidden">&#9208; Response Window</span>
+                        <span id="tone-heard-indicator" class="hidden">&#10003; Threshold Detected</span>
+                    </div>
+
+                    <div class="cal-level-wrap">
+                        <div class="cal-level-meta">
+                            <span>Stimulus Level</span>
+                            <span id="cal-amp-bar-label-value">0%</span>
+                        </div>
+                        <div class="cal-level-track">
+                            <div
+                                class="cal-level-fill"
+                                id="cal-amp-bar-fill"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-heard" id="btn-heard" disabled>
+                        I Hear It
+                    </button>
+                </div>
+
+                <div id="results-card" class="results-card hidden">
+                    <div class="results-header">Calibrated Audiogram Profile</div>
+                    <div id="results-container"></div>
+                </div>
+            </main>
+
+            <!-- RIGHT PANEL -->
+            <aside id="right-panel">
+                <div id="eq-section">
+                    <div class="eq-title">Equalization</div>
+                    <div id="eq-panel-container"></div>
+
+                    <button
+                        class="btn btn-secondary btn-block btn-sm"
+                        id="btn-reset-eq"
+                    >
+                        Reset EQ
+                    </button>
+                </div>
+
+                <!--<div id="diag-section">
+                    <div class="diag-title">Diagnostics</div>
+                    <div id="diag-panel-container"></div>
+                </div>-->
+            </aside>
         </div>
+
         <div id="toast-container"></div>
+        <div id="ag-tooltip"></div>
+
+        <script type="module" src="js/app.js"></script>
     </body>
 </html>

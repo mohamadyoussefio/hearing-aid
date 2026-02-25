@@ -155,7 +155,7 @@ export class CalibrationController {
       this._currentAmp = amp;
 
       // Ensure these match your config.h constants
-      const MIN_AMP = 0.001;
+      const MIN_AMP = 0.02;
       const MAX_AMP = 0.8;
 
       // Linear mapping: (current - start) / (total range)
@@ -178,7 +178,7 @@ export class CalibrationController {
     }
 
     if (line.includes("(silence)")) {
-      const MIN_AMP = 0.001;
+      const MIN_AMP = 0.02;
       const MAX_AMP = 0.8;
       const progressPct = Math.max(
         0,

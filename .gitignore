@@ -2,6 +2,10 @@
 .DS_Store
 .DS_Store?
 ._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 # Build artifacts & compilation caches
 build/
@@ -11,6 +15,36 @@ bin/
 *.hex
 *.bin
 *.elf
+*.d
+*.obj
+*.srec
+*.sym
+
+# PlatformIO & Arduino caches
+.pio/
+.pioenvs/
+.piolibdeps/
+.clang-format
+compile_commands.json
+.arduino15/
+
+# Web dependencies & outputs
+node_modules/
+package-lock.json
+dist/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Environment and sensitive keys
+.env
+.env.*
+*.local
 
 # Editor directories and autosave files
 .vscode/
@@ -18,3 +52,5 @@ bin/
 *.swp
 *.swo
 *~
+*.bak
+*.orig
